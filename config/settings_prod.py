@@ -1,9 +1,13 @@
 """
-Production settings for NCP Wheels V2 project.
+Production settings for NCP Wheels project.
 """
-from .settings import *
 import os
 import sys
+from .settings import *
+
+# Add the project root to the Python path
+PROJECT_ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
+sys.path.insert(0, PROJECT_ROOT)
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
@@ -27,7 +31,7 @@ INSTALLED_APPS = [
     'corsheaders',
     
     # Local apps
-    'apps.accounts',
+    'apps.users',
     'apps.cars',
     'apps.payments',
 ]
