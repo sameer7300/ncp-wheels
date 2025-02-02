@@ -55,12 +55,11 @@ DATABASES = {
         'HOST': os.getenv('DB_HOST', 'srv1014.hstgr.io'),
         'PORT': os.getenv('DB_PORT', '3306'),
         'OPTIONS': {
-            'init_command': "SET sql_mode='STRICT_TRANS_TABLES'",
             'charset': 'utf8mb4',
-            'connect_timeout': 60,
-            'sql_mode': 'STRICT_TRANS_TABLES',
-            'use_unicode': True,
-            'protocol': 'tcp',  # Force TCP protocol
+            'connect_timeout': 30,
+            'autocommit': True,
+            'isolation_level': 'read committed',
+            'init_command': "SET sql_mode='STRICT_TRANS_TABLES'",
         }
     }
 }
