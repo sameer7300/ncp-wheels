@@ -13,7 +13,7 @@ services:
       - key: WEB_CONCURRENCY
         value: 4
       - key: DB_HOST
-        value: sql.srv1014.hstgr.io
+        value: srv1757.hstgr.io
       - key: DB_PORT
         value: 3306
       - key: DB_NAME
