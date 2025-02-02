@@ -2,11 +2,18 @@
 # exit on error
 set -o errexit
 
-# Install dependencies
+echo "Installing system dependencies..."
+sudo apt-get update
+sudo apt-get install -y default-libmysqlclient-dev build-essential pkg-config python3-dev
+
+echo "Installing Python dependencies..."
+pip install --upgrade pip
 pip install -r requirements.txt
 
-# Collect static files
-python manage.py collectstatic --no-input
+echo "Collecting static files..."
+python manage.py collectstatic --no-input --settings=config.settings_prod
 
-# Run migrations
-python manage.py migrate
+echo "Running migrations..."
+python manage.py migrate --settings=config.settings_prod
+
+echo "Build completed successfully!"

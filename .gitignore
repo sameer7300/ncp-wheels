@@ -26,44 +26,37 @@ local_settings.py
 db.sqlite3
 db.sqlite3-journal
 media/
+staticfiles/
 
-# Virtual Environment
+# Environment
+.env
+.env.production
+.venv
+env/
 venv/
 ENV/
 
-# IDE
-.idea/
+# VS Code
 .vscode/
+*.code-workspace
+
+# PyCharm
+.idea/
+
+# Node
+node_modules/
+npm-debug.log
+yarn-debug.log
+yarn-error.log
+
+# Mac
+.DS_Store
+
+# Windows
+Thumbs.db
+Desktop.ini
+
+# Local development
 *.swp
 *.swo
-
-# Frontend
-node_modules/
-npm-debug.log*
-yarn-debug.log*
-yarn-error.log*
-.env
-.env.local
-.env.development.local
-.env.test.local
-.env.production.local
-
-# Static files
-staticfiles/
-.static_storage/
-.media/
-
-# Misc
-.DS_Store
-Thumbs.db
-
-# Production specific
-.env.production
-*.pyc
-__pycache__/
-.env
-venv/
-db.sqlite3
-mediafiles/
-node_modules/
-.DS_Store
+*~
