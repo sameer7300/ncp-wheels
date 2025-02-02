@@ -15,6 +15,14 @@ INSTALLED_APPS = [app for app in INSTALLED_APPS if app != 'debug_toolbar']
 if 'debug_toolbar' in MIDDLEWARE:
     MIDDLEWARE.remove('debug_toolbar.middleware.DebugToolbarMiddleware')
 
+# CORS settings
+CORS_ALLOWED_ORIGINS = [
+    "https://ncp-wheels.com",
+    "https://www.ncp-wheels.com",
+    "https://ncp-wheels.onrender.com",
+]
+CORS_ALLOW_CREDENTIALS = True
+
 # HTTPS settings
 SECURE_SSL_REDIRECT = True
 SESSION_COOKIE_SECURE = True
