@@ -35,6 +35,9 @@ INSTALLED_APPS = [
     'apps.users',
     'apps.cars',
     'apps.payments',
+    'apps.analytics',
+    'apps.messaging',
+    'apps.notifications',
 ]
 
 # Remove debug toolbar middleware if present
