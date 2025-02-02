@@ -3,6 +3,7 @@ Production settings for NCP Wheels V2 project.
 """
 from .settings import *
 import os
+import sys
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
@@ -45,6 +46,14 @@ STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 if 'whitenoise.middleware.WhiteNoiseMiddleware' not in MIDDLEWARE:
     MIDDLEWARE.insert(1, 'whitenoise.middleware.WhiteNoiseMiddleware')
 
+# Print debug info
+print("Python version:", sys.version)
+print("Attempting database connection with following parameters:")
+print(f"HOST: {os.getenv('DB_HOST', '185.201.11.154')}")
+print(f"PORT: {os.getenv('DB_PORT', '3306')}")
+print(f"NAME: {os.getenv('DB_NAME', 'u466615417_ncpwheels')}")
+print(f"USER: {os.getenv('DB_USER', 'u466615417_sameergul321')}")
+
 # Database settings for Hostinger MySQL
 DATABASES = {
     'default': {
@@ -52,7 +61,7 @@ DATABASES = {
         'NAME': os.getenv('DB_NAME', 'u466615417_ncpwheels'),
         'USER': os.getenv('DB_USER', 'u466615417_sameergul321'),
         'PASSWORD': os.getenv('DB_PASSWORD'),
-        'HOST': os.getenv('DB_HOST', 'srv1014.hstgr.io'),
+        'HOST': os.getenv('DB_HOST', '185.201.11.154'),  # Using IP address instead of hostname
         'PORT': os.getenv('DB_PORT', '3306'),
         'OPTIONS': {
             'charset': 'utf8mb4',
@@ -86,14 +95,23 @@ LOGGING = {
     'handlers': {
         'console': {
             'class': 'logging.StreamHandler',
+            'level': 'DEBUG',
+            'formatter': 'verbose',
         },
     },
-    'root': {
-        'handlers': ['console'],
-        'level': 'INFO',
+    'formatters': {
+        'verbose': {
+            'format': '{levelname} {asctime} {module} {process:d} {thread:d} {message}',
+            'style': '{',
+        },
     },
     'loggers': {
         'django.db.backends': {
+            'handlers': ['console'],
+            'level': 'DEBUG',
+            'propagate': True,
+        },
+        'django.request': {
             'handlers': ['console'],
             'level': 'DEBUG',
             'propagate': True,
