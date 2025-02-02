@@ -29,6 +29,7 @@ INSTALLED_APPS = [
     'crispy_bootstrap5',
     'rest_framework',
     'corsheaders',
+    'phonenumber_field',
     
     # Local apps
     'apps.users',

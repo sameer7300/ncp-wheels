@@ -12,6 +12,10 @@ crispy-bootstrap5==2023.10
 django-cors-headers==4.3.1
 Pillow==10.1.0
 
+# Phone Numbers
+django-phonenumber-field==7.3.0
+phonenumbers==8.13.0
+
 # API
 djangorestframework==3.14.0
 
