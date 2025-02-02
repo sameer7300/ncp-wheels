@@ -10,10 +10,9 @@ DEBUG = False
 # Update allowed hosts
 ALLOWED_HOSTS = ['ncp-wheels.onrender.com', 'ncp-wheels.com', 'www.ncp-wheels.com']
 
-# Remove development-only apps
+# Remove development-only apps but keep required ones
 INSTALLED_APPS = [app for app in INSTALLED_APPS if app != 'debug_toolbar']
-if 'debug_toolbar' in MIDDLEWARE:
-    MIDDLEWARE.remove('debug_toolbar.middleware.DebugToolbarMiddleware')
+MIDDLEWARE = [m for m in MIDDLEWARE if not m.startswith('debug_toolbar.')]
 
 # CORS settings
 CORS_ALLOWED_ORIGINS = [
@@ -43,7 +42,8 @@ MEDIA_URL = '/media/'
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 # Add whitenoise middleware at the top
-MIDDLEWARE.insert(1, 'whitenoise.middleware.WhiteNoiseMiddleware')
+if 'whitenoise.middleware.WhiteNoiseMiddleware' not in MIDDLEWARE:
+    MIDDLEWARE.insert(1, 'whitenoise.middleware.WhiteNoiseMiddleware')
 
 # Database settings for Hostinger MySQL
 DATABASES = {
