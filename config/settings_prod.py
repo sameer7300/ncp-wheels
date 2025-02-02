@@ -10,6 +10,11 @@ DEBUG = False
 # Update allowed hosts
 ALLOWED_HOSTS = ['ncp-wheels.onrender.com', 'ncp-wheels.com', 'www.ncp-wheels.com']
 
+# Remove development-only apps
+INSTALLED_APPS = [app for app in INSTALLED_APPS if app != 'debug_toolbar']
+if 'debug_toolbar' in MIDDLEWARE:
+    MIDDLEWARE.remove('debug_toolbar.middleware.DebugToolbarMiddleware')
+
 # HTTPS settings
 SECURE_SSL_REDIRECT = True
 SESSION_COOKIE_SECURE = True
