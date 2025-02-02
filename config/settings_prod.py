@@ -52,12 +52,14 @@ DATABASES = {
         'NAME': os.getenv('DB_NAME', 'u466615417_ncpwheels'),
         'USER': os.getenv('DB_USER', 'u466615417_sameergul321'),
         'PASSWORD': os.getenv('DB_PASSWORD'),
-        'HOST': os.getenv('DB_HOST', 'localhost'),
+        'HOST': os.getenv('DB_HOST', 'srv1014.hstgr.io'),  # Use actual hostname instead of localhost
         'PORT': os.getenv('DB_PORT', '3306'),
         'OPTIONS': {
             'init_command': "SET sql_mode='STRICT_TRANS_TABLES'",
             'charset': 'utf8mb4',
             'connect_timeout': 60,
+            'sql_mode': 'STRICT_TRANS_TABLES',
+            'unix_socket': None,  # Force TCP/IP connection
         }
     }
 }
