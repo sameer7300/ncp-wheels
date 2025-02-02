@@ -2,13 +2,24 @@ services:
   - type: web
     name: ncp-wheels
     env: python
-    buildCommand: pip install -r requirements.txt
+    region: oregon
+    buildCommand: ./build.sh
     startCommand: gunicorn config.wsgi:application
     envVars:
       - key: DJANGO_SETTINGS_MODULE
         value: config.settings_prod
       - key: PYTHON_VERSION
-        value: 3.9.12
+        value: 3.9.18
       - key: WEB_CONCURRENCY
         value: 4
     autoDeploy: true
+    plan: free
+    runtime: python3.9
+    buildFilter:
+      paths:
+      - '**/*.py'
+      - '**/*.html'
+      - requirements.txt
+      - build.sh
+    preInstallCommand: |
+      apt-get update && apt-get install -y default-libmysqlclient-dev build-essential pkg-config python3-dev

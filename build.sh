@@ -2,10 +2,6 @@
 # exit on error
 set -o errexit
 
-echo "Installing system dependencies..."
-apt-get update
-apt-get install -y default-libmysqlclient-dev build-essential pkg-config python3-dev
-
 echo "Installing Python dependencies..."
 pip install --upgrade pip
 pip install -r requirements.txt
