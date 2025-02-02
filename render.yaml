@@ -12,6 +12,16 @@ services:
         value: 3.9.18
       - key: WEB_CONCURRENCY
         value: 4
+      - key: DB_HOST
+        value: srv1014.hstgr.io
+      - key: DB_PORT
+        value: 3306
+      - key: DB_NAME
+        value: u466615417_ncpwheels
+      - key: DB_USER
+        value: u466615417_sameergul321
+      - key: DB_PASSWORD
+        sync: false
     autoDeploy: true
     plan: free
     runtime: python3.9
