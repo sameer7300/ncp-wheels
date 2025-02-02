@@ -49,7 +49,7 @@ if 'whitenoise.middleware.WhiteNoiseMiddleware' not in MIDDLEWARE:
 # Print debug info
 print("Python version:", sys.version)
 print("Attempting database connection with following parameters:")
-print(f"HOST: {os.getenv('DB_HOST', '185.201.11.154')}")
+print(f"HOST: {os.getenv('DB_HOST', 'mysql.hostinger.com')}")
 print(f"PORT: {os.getenv('DB_PORT', '3306')}")
 print(f"NAME: {os.getenv('DB_NAME', 'u466615417_ncpwheels')}")
 print(f"USER: {os.getenv('DB_USER', 'u466615417_sameergul321')}")
@@ -61,13 +61,20 @@ DATABASES = {
         'NAME': os.getenv('DB_NAME', 'u466615417_ncpwheels'),
         'USER': os.getenv('DB_USER', 'u466615417_sameergul321'),
         'PASSWORD': os.getenv('DB_PASSWORD'),
-        'HOST': os.getenv('DB_HOST', '185.201.11.154'),  # Using IP address instead of hostname
+        'HOST': os.getenv('DB_HOST', 'mysql.hostinger.com'),  # Using public hostname
         'PORT': os.getenv('DB_PORT', '3306'),
         'OPTIONS': {
             'charset': 'utf8mb4',
             'connect_timeout': 60,
             'autocommit': True,
             'init_command': "SET sql_mode='STRICT_TRANS_TABLES'",
+            'ssl': {
+                'reqs': {
+                    'ssl_cert': None,
+                    'ssl_key': None,
+                    'ssl_ca': None,
+                }
+            }
         }
     }
 }
