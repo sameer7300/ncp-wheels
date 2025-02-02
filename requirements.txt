@@ -1,6 +1,7 @@
 # Core
 Django==4.2.9
 python-dotenv==1.0.0
+requests==2.31.0
 
 # Database
 mysqlclient==2.2.1
