@@ -3,8 +3,8 @@
 set -o errexit
 
 echo "Installing system dependencies..."
-sudo apt-get update
-sudo apt-get install -y default-libmysqlclient-dev build-essential pkg-config python3-dev
+apt-get update
+apt-get install -y default-libmysqlclient-dev build-essential pkg-config python3-dev
 
 echo "Installing Python dependencies..."
 pip install --upgrade pip
