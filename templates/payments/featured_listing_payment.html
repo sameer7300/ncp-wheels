@@ -1,0 +1,131 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load car_filters %}
+
+{% block title %}Feature Your Listing - NCP Wheels{% endblock %}
+
+{% block content %}
+<div class="min-h-screen bg-gray-50 py-12">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="text-center">
+            <h1 class="text-3xl font-bold text-gray-900">Feature Your Listing</h1>
+            <p class="mt-4 text-lg text-gray-500">Get more visibility for your car listing by featuring it on our platform</p>
+        </div>
+
+        <div class="mt-12">
+            <div class="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
+                {% for plan in plans %}
+                <div class="relative flex flex-col rounded-lg border border-gray-200 bg-white p-6 shadow-sm">
+                    <div class="flex-1">
+                        <h3 class="text-xl font-semibold text-gray-900">{{ plan.name }}</h3>
+                        <p class="mt-4 flex items-baseline text-gray-900">
+                            <span class="text-4xl font-bold tracking-tight">PKR {{ plan.price|format_price }}</span>
+                            <span class="ml-1 text-xl font-semibold">/{{ plan.duration_days }} days</span>
+                        </p>
+                        <p class="mt-6 text-gray-500">{{ plan.description }}</p>
+                    </div>
+
+                    <form method="post" action="{% url 'payments:create_featured_payment' car.id plan.id %}" class="mt-6">
+                        {% csrf_token %}
+                        <div class="space-y-4">
+                            <div>
+                                <label for="payment_method" class="block text-sm font-medium text-gray-700">Payment Method</label>
+                                <select name="payment_method" id="payment_method" required class="mt-1 block w-full rounded-md border-gray-300 py-2 pl-3 pr-10 text-base focus:border-primary-500 focus:outline-none focus:ring-primary-500 sm:text-sm">
+                                    <option value="easypaisa">EasyPaisa</option>
+                                    <option value="jazzcash">JazzCash</option>
+                                    <option value="card">Credit/Debit Card</option>
+                                </select>
+                            </div>
+
+                            <div>
+                                <label for="mobile_number" class="block text-sm font-medium text-gray-700">Mobile Number</label>
+                                <input type="tel" name="mobile_number" id="mobile_number" required pattern="[0-9]{11}" placeholder="03XXXXXXXXX" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-primary-500 focus:ring-primary-500 sm:text-sm">
+                            </div>
+
+                            <button type="submit" class="w-full rounded-md border border-transparent bg-primary-600 py-2 px-4 text-sm font-medium text-white shadow-sm hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2">
+                                Select Plan
+                            </button>
+                        </div>
+                    </form>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+
+        <!-- Benefits Section -->
+        <div class="mt-16">
+            <h2 class="text-2xl font-bold text-gray-900">Benefits of Featured Listings</h2>
+            <div class="mt-8 grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-3">
+                <div class="flex">
+                    <div class="flex-shrink-0">
+                        <div class="flex h-12 w-12 items-center justify-center rounded-md bg-primary-500 text-white">
+                            <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z" />
+                            </svg>
+                        </div>
+                    </div>
+                    <div class="ml-4">
+                        <h3 class="text-lg font-medium text-gray-900">Increased Visibility</h3>
+                        <p class="mt-2 text-gray-500">Your listing will appear at the top of search results and on the homepage</p>
+                    </div>
+                </div>
+
+                <div class="flex">
+                    <div class="flex-shrink-0">
+                        <div class="flex h-12 w-12 items-center justify-center rounded-md bg-primary-500 text-white">
+                            <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                            </svg>
+                        </div>
+                    </div>
+                    <div class="ml-4">
+                        <h3 class="text-lg font-medium text-gray-900">More Views</h3>
+                        <p class="mt-2 text-gray-500">Featured listings receive up to 5x more views than regular listings</p>
+                    </div>
+                </div>
+
+                <div class="flex">
+                    <div class="flex-shrink-0">
+                        <div class="flex h-12 w-12 items-center justify-center rounded-md bg-primary-500 text-white">
+                            <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                            </svg>
+                        </div>
+                    </div>
+                    <div class="ml-4">
+                        <h3 class="text-lg font-medium text-gray-900">Faster Sales</h3>
+                        <p class="mt-2 text-gray-500">Featured listings typically sell 2x faster than regular listings</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Payment Processing Modal -->
+<div id="payment-modal" class="hidden fixed inset-0 bg-gray-500 bg-opacity-75 flex items-center justify-center">
+    <div class="bg-white p-8 rounded-lg max-w-md w-full">
+        <div class="text-center">
+            <h3 class="text-lg font-medium text-gray-900 mb-4">Processing Payment</h3>
+            <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-primary-500 mx-auto"></div>
+            <p class="mt-4 text-sm text-gray-500">Please wait while we process your payment...</p>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const forms = document.querySelectorAll('form');
+    const modal = document.getElementById('payment-modal');
+
+    forms.forEach(form => {
+        form.addEventListener('submit', function() {
+            modal.classList.remove('hidden');
+        });
+    });
+});
+</script>
+{% endblock %}

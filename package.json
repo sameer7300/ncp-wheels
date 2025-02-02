@@ -1,0 +1,17 @@
+{
+  "name": "ncp-wheels-v2",
+  "version": "1.0.0",
+  "description": "Modern Car Marketplace",
+  "scripts": {
+    "build": "tailwindcss -i static/css/styles.css -o static/css/output.css --minify",
+    "watch": "tailwindcss -i static/css/styles.css -o static/css/output.css --watch"
+  },
+  "dependencies": {
+    "autoprefixer": "^10.4.14",
+    "postcss": "^8.4.24",
+    "tailwindcss": "^3.3.2",
+    "@tailwindcss/forms": "^0.5.3",
+    "@tailwindcss/typography": "^0.5.9",
+    "@tailwindcss/aspect-ratio": "^0.4.2"
+  }
+}

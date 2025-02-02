@@ -1,0 +1,205 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Edit Profile - NCP Wheels{% endblock %}
+
+{% block content %}
+<div class="min-h-screen bg-gray-50 py-12">
+    <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="bg-white shadow overflow-hidden rounded-lg">
+            <div class="px-4 py-5 sm:px-6">
+                <h3 class="text-lg leading-6 font-medium text-gray-900">
+                    Edit Profile
+                </h3>
+                <p class="mt-1 max-w-2xl text-sm text-gray-500">
+                    Update your personal information and account settings.
+                </p>
+            </div>
+            
+            {% if form.errors %}
+            <div class="px-4 py-5 sm:px-6">
+                <div class="rounded-md bg-red-50 p-4">
+                    <div class="flex">
+                        <div class="flex-shrink-0">
+                            <svg class="h-5 w-5 text-red-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd" />
+                            </svg>
+                        </div>
+                        <div class="ml-3">
+                            <h3 class="text-sm font-medium text-red-800">There were errors with your submission</h3>
+                            <div class="mt-2 text-sm text-red-700">
+                                <ul class="list-disc pl-5 space-y-1">
+                                    {% for field in form %}
+                                        {% for error in field.errors %}
+                                            <li>{{ field.label }}: {{ error }}</li>
+                                        {% endfor %}
+                                    {% endfor %}
+                                    {% for error in form.non_field_errors %}
+                                        <li>{{ error }}</li>
+                                    {% endfor %}
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endif %}
+            
+            <form method="post" enctype="multipart/form-data" class="border-t border-gray-200">
+                {% csrf_token %}
+                <div class="px-4 py-5 sm:px-6 space-y-6">
+                    <!-- Basic Information -->
+                    <div>
+                        <h4 class="text-base font-medium text-gray-900">Basic Information</h4>
+                        <div class="mt-4 grid grid-cols-1 gap-y-6 sm:grid-cols-2 sm:gap-x-4">
+                            <div>
+                                <label for="{{ form.first_name.id_for_label }}" class="block text-sm font-medium text-gray-700">First Name</label>
+                                {{ form.first_name }}
+                                {% if form.first_name.errors %}
+                                    <p class="mt-1 text-sm text-red-600">{{ form.first_name.errors.0 }}</p>
+                                {% endif %}
+                            </div>
+                            
+                            <div>
+                                <label for="{{ form.last_name.id_for_label }}" class="block text-sm font-medium text-gray-700">Last Name</label>
+                                {{ form.last_name }}
+                                {% if form.last_name.errors %}
+                                    <p class="mt-1 text-sm text-red-600">{{ form.last_name.errors.0 }}</p>
+                                {% endif %}
+                            </div>
+                            
+                            <div>
+                                <label for="{{ form.email.id_for_label }}" class="block text-sm font-medium text-gray-700">Email</label>
+                                {{ form.email }}
+                                {% if form.email.errors %}
+                                    <p class="mt-1 text-sm text-red-600">{{ form.email.errors.0 }}</p>
+                                {% endif %}
+                            </div>
+                            
+                            <div>
+                                <label for="{{ form.phone_number.id_for_label }}" class="block text-sm font-medium text-gray-700">Phone Number</label>
+                                {{ form.phone_number }}
+                                {% if form.phone_number.errors %}
+                                    <p class="mt-1 text-sm text-red-600">{{ form.phone_number.errors.0 }}</p>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Profile Information -->
+                    <div class="border-t border-gray-200 pt-6">
+                        <h4 class="text-base font-medium text-gray-900">Profile Information</h4>
+                        <div class="mt-4 space-y-6">
+                            <div>
+                                <label for="{{ form.profile_picture.id_for_label }}" class="block text-sm font-medium text-gray-700">Profile Picture</label>
+                                <div class="mt-1 flex items-center">
+                                    {% if user.profile_picture %}
+                                        <img src="{{ user.profile_picture.url }}" alt="Current profile picture" class="h-12 w-12 rounded-full">
+                                    {% endif %}
+                                    <div class="ml-4">
+                                        {{ form.profile_picture }}
+                                    </div>
+                                </div>
+                                {% if form.profile_picture.errors %}
+                                    <p class="mt-1 text-sm text-red-600">{{ form.profile_picture.errors.0 }}</p>
+                                {% endif %}
+                            </div>
+                            
+                            <div>
+                                <label for="{{ form.bio.id_for_label }}" class="block text-sm font-medium text-gray-700">Bio</label>
+                                {{ form.bio }}
+                                {% if form.bio.errors %}
+                                    <p class="mt-1 text-sm text-red-600">{{ form.bio.errors.0 }}</p>
+                                {% endif %}
+                            </div>
+                            
+                            <div>
+                                <label for="{{ form.location.id_for_label }}" class="block text-sm font-medium text-gray-700">Location</label>
+                                {{ form.location }}
+                                {% if form.location.errors %}
+                                    <p class="mt-1 text-sm text-red-600">{{ form.location.errors.0 }}</p>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Social Media Links -->
+                    <div class="border-t border-gray-200 pt-6">
+                        <h4 class="text-base font-medium text-gray-900">Social Media Links</h4>
+                        <div class="mt-4 grid grid-cols-1 gap-y-6 sm:grid-cols-2 sm:gap-x-4">
+                            <div>
+                                <label for="{{ form.facebook.id_for_label }}" class="block text-sm font-medium text-gray-700">Facebook</label>
+                                {{ form.facebook }}
+                                {% if form.facebook.errors %}
+                                    <p class="mt-1 text-sm text-red-600">{{ form.facebook.errors.0 }}</p>
+                                {% endif %}
+                            </div>
+                            
+                            <div>
+                                <label for="{{ form.twitter.id_for_label }}" class="block text-sm font-medium text-gray-700">Twitter</label>
+                                {{ form.twitter }}
+                                {% if form.twitter.errors %}
+                                    <p class="mt-1 text-sm text-red-600">{{ form.twitter.errors.0 }}</p>
+                                {% endif %}
+                            </div>
+                            
+                            <div>
+                                <label for="{{ form.instagram.id_for_label }}" class="block text-sm font-medium text-gray-700">Instagram</label>
+                                {{ form.instagram }}
+                                {% if form.instagram.errors %}
+                                    <p class="mt-1 text-sm text-red-600">{{ form.instagram.errors.0 }}</p>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Dealer Information -->
+                    <div class="border-t border-gray-200 pt-6">
+                        <div class="flex items-start">
+                            <div class="flex items-center h-5">
+                                {{ form.is_dealer }}
+                            </div>
+                            <div class="ml-3 text-sm">
+                                <label for="{{ form.is_dealer.id_for_label }}" class="font-medium text-gray-700">Register as a Dealer</label>
+                                <p class="text-gray-500">Check this if you want to sell cars on our platform</p>
+                            </div>
+                        </div>
+                        
+                        <div class="mt-6 space-y-6" x-show="$refs.isDealerCheckbox.checked">
+                            <div>
+                                <label for="{{ form.business_name.id_for_label }}" class="block text-sm font-medium text-gray-700">Business Name</label>
+                                {{ form.business_name }}
+                                {% if form.business_name.errors %}
+                                    <p class="mt-1 text-sm text-red-600">{{ form.business_name.errors.0 }}</p>
+                                {% endif %}
+                            </div>
+                            
+                            <div>
+                                <label for="{{ form.business_address.id_for_label }}" class="block text-sm font-medium text-gray-700">Business Address</label>
+                                {{ form.business_address }}
+                                {% if form.business_address.errors %}
+                                    <p class="mt-1 text-sm text-red-600">{{ form.business_address.errors.0 }}</p>
+                                {% endif %}
+                            </div>
+                            
+                            <div>
+                                <label for="{{ form.business_registration_number.id_for_label }}" class="block text-sm font-medium text-gray-700">Business Registration Number</label>
+                                {{ form.business_registration_number }}
+                                {% if form.business_registration_number.errors %}
+                                    <p class="mt-1 text-sm text-red-600">{{ form.business_registration_number.errors.0 }}</p>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="px-4 py-3 bg-gray-50 text-right sm:px-6">
+                    <button type="submit" class="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-primary-600 hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500">
+                        Save Changes
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

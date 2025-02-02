@@ -1,0 +1,138 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Feature Your Listing - {{ car.title }}{% endblock %}
+
+{% block content %}
+<div class="container mx-auto px-4 py-8">
+    <h1 class="text-3xl font-bold mb-8">Feature Your Listing</h1>
+    
+    <!-- Car Info -->
+    <div class="bg-white rounded-lg shadow-md p-6 mb-8">
+        <div class="flex items-center">
+            {% if car.images.exists %}
+                <img src="{{ car.images.first.image.url }}" alt="{{ car.title }}" class="w-32 h-32 object-cover rounded-lg mr-6">
+            {% endif %}
+            <div>
+                <h2 class="text-2xl font-semibold">{{ car.title }}</h2>
+                <p class="text-gray-600">{{ car.brand }} {{ car.model }} {{ car.year }}</p>
+                <p class="text-lg font-semibold text-primary">PKR {{ car.price|floatformat:0 }}</p>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Featured Listing Plans -->
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+        {% for plan in plans %}
+        <div class="bg-white rounded-lg shadow-md p-6 hover:shadow-lg transition-shadow duration-200">
+            <h3 class="text-xl font-semibold mb-4">{{ plan.get_duration_days_display }}</h3>
+            <p class="text-3xl font-bold text-primary mb-4">PKR {{ plan.amount|floatformat:0 }}</p>
+            <ul class="text-gray-600 mb-6">
+                <li class="mb-2">✓ Priority in search results</li>
+                <li class="mb-2">✓ Featured badge on listing</li>
+                <li class="mb-2">✓ Higher visibility</li>
+                <li class="mb-2">✓ {{ plan.duration_days }} days duration</li>
+            </ul>
+            
+            <!-- Payment Methods -->
+            <form action="{% url 'payments:initiate-payment' car.id %}" method="POST" class="space-y-4">
+                {% csrf_token %}
+                <input type="hidden" name="plan_id" value="{{ plan.id }}">
+                
+                <div class="space-y-2">
+                    <label class="block">
+                        <input type="radio" name="payment_method" value="easypaisa" class="mr-2">
+                        <span>EasyPaisa</span>
+                    </label>
+                    <label class="block">
+                        <input type="radio" name="payment_method" value="jazzcash" class="mr-2">
+                        <span>JazzCash</span>
+                    </label>
+                    <label class="block">
+                        <input type="radio" name="payment_method" value="card" class="mr-2">
+                        <span>Credit/Debit Card</span>
+                    </label>
+                </div>
+                
+                <button type="submit" class="w-full bg-primary text-white py-2 px-4 rounded-lg hover:bg-primary-dark transition-colors duration-200">
+                    Select Plan
+                </button>
+            </form>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+
+<!-- Payment Processing Modal -->
+<div id="paymentModal" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
+    <div class="bg-white rounded-lg p-8 max-w-md w-full">
+        <h3 class="text-xl font-semibold mb-4">Processing Payment</h3>
+        <div id="paymentFrame" class="w-full"></div>
+    </div>
+</div>
+
+{% endblock %}
+
+{% block extra_js %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const forms = document.querySelectorAll('form');
+    const paymentModal = document.getElementById('paymentModal');
+    const paymentFrame = document.getElementById('paymentFrame');
+    
+    forms.forEach(form => {
+        form.addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const formData = new FormData(form);
+            
+            try {
+                const response = await fetch(form.action, {
+                    method: 'POST',
+                    body: formData,
+                    headers: {
+                        'X-CSRFToken': formData.get('csrfmiddlewaretoken')
+                    }
+                });
+                
+                const data = await response.json();
+                
+                if (data.error) {
+                    alert(data.error);
+                    return;
+                }
+                
+                // Show payment modal
+                paymentModal.classList.remove('hidden');
+                
+                // Handle different payment methods
+                if (formData.get('payment_method') === 'card') {
+                    // For card payments, create an iframe
+                    paymentFrame.innerHTML = `<iframe src="${data.payment_url}" class="w-full h-96 border-0"></iframe>`;
+                } else {
+                    // For mobile payments, show QR code or instructions
+                    paymentFrame.innerHTML = `
+                        <div class="text-center">
+                            <img src="${data.qr_code}" alt="Payment QR Code" class="mx-auto mb-4">
+                            <p class="text-lg font-semibold mb-2">Scan QR Code to Pay</p>
+                            <p class="text-gray-600">Amount: PKR ${data.amount}</p>
+                            <p class="text-gray-600">Reference: ${data.reference_id}</p>
+                        </div>
+                    `;
+                }
+                
+            } catch (error) {
+                alert('An error occurred. Please try again.');
+            }
+        });
+    });
+    
+    // Close modal when clicking outside
+    paymentModal.addEventListener('click', function(e) {
+        if (e.target === paymentModal) {
+            paymentModal.classList.add('hidden');
+        }
+    });
+});
+</script>
+{% endblock %}

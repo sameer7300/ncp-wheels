@@ -1,0 +1,372 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load crispy_forms_tags %}
+
+{% block title %}{% if form.instance.pk %}Edit Car{% else %}Add New Car{% endif %} - NCP Wheels{% endblock %}
+
+{% block content %}
+<div class="container mx-auto px-4 py-8">
+    <div class="max-w-3xl mx-auto">
+        <h1 class="text-3xl font-bold mb-8">
+            {% if form.instance.pk %}
+            Edit Car Details
+            {% else %}
+            Add New Car
+            {% endif %}
+        </h1>
+
+        <form method="post" enctype="multipart/form-data" class="space-y-6">
+            {% csrf_token %}
+            
+            <!-- Basic Information -->
+            <div class="bg-white rounded-lg shadow-sm p-6 space-y-4">
+                <h2 class="text-xl font-semibold mb-4">Basic Information</h2>
+                
+                <!-- Brand and Model -->
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                        <label for="{{ form.brand.id_for_label }}" class="block text-sm font-medium text-gray-700">
+                            Brand
+                        </label>
+                        <select name="{{ form.brand.name }}" id="{{ form.brand.id_for_label }}" 
+                                class="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-primary-500 focus:border-primary-500 rounded-md">
+                            {% for value, label in form.fields.brand.choices %}
+                            <option value="{{ value }}" {% if form.brand.value == value %}selected{% endif %}>
+                                {{ label }}
+                            </option>
+                            {% endfor %}
+                        </select>
+                        {% if form.brand.errors %}
+                        <p class="mt-2 text-sm text-red-600">
+                            {{ form.brand.errors|join:", " }}
+                        </p>
+                        {% endif %}
+                    </div>
+                    <div>
+                        <label for="{{ form.model.id_for_label }}" class="block text-sm font-medium text-gray-700">
+                            Model
+                        </label>
+                        <input type="text" name="{{ form.model.name }}" id="{{ form.model.id_for_label }}" 
+                               value="{{ form.model.value|default:'' }}"
+                               class="mt-1 focus:ring-primary-500 focus:border-primary-500 block w-full shadow-sm border-gray-300 rounded-md">
+                        {% if form.model.errors %}
+                        <p class="mt-2 text-sm text-red-600">
+                            {{ form.model.errors|join:", " }}
+                        </p>
+                        {% endif %}
+                    </div>
+                </div>
+
+                <!-- Year and Condition -->
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                        <label for="{{ form.year.id_for_label }}" class="block text-sm font-medium text-gray-700">
+                            Year
+                        </label>
+                        <input type="number" name="{{ form.year.name }}" id="{{ form.year.id_for_label }}" 
+                               value="{{ form.year.value|default:'' }}"
+                               class="mt-1 focus:ring-primary-500 focus:border-primary-500 block w-full shadow-sm border-gray-300 rounded-md">
+                        {% if form.year.errors %}
+                        <p class="mt-2 text-sm text-red-600">
+                            {{ form.year.errors|join:", " }}
+                        </p>
+                        {% endif %}
+                    </div>
+                    <div>
+                        <label for="{{ form.condition.id_for_label }}" class="block text-sm font-medium text-gray-700">
+                            Condition
+                        </label>
+                        <select name="{{ form.condition.name }}" id="{{ form.condition.id_for_label }}"
+                                class="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-primary-500 focus:border-primary-500 rounded-md">
+                            {% for value, label in form.fields.condition.choices %}
+                            <option value="{{ value }}" {% if form.condition.value == value %}selected{% endif %}>
+                                {{ label }}
+                            </option>
+                            {% endfor %}
+                        </select>
+                        {% if form.condition.errors %}
+                        <p class="mt-2 text-sm text-red-600">
+                            {{ form.condition.errors|join:", " }}
+                        </p>
+                        {% endif %}
+                    </div>
+                </div>
+
+                <!-- Price and Location -->
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                        <label for="{{ form.price.id_for_label }}" class="block text-sm font-medium text-gray-700">
+                            Price
+                        </label>
+                        <input type="number" name="{{ form.price.name }}" id="{{ form.price.id_for_label }}" 
+                               value="{{ form.price.value|default:'' }}"
+                               class="mt-1 focus:ring-primary-500 focus:border-primary-500 block w-full shadow-sm border-gray-300 rounded-md">
+                        {% if form.price.errors %}
+                        <p class="mt-2 text-sm text-red-600">
+                            {{ form.price.errors|join:", " }}
+                        </p>
+                        {% endif %}
+                    </div>
+                    <div>
+                        <label for="{{ form.mileage.id_for_label }}" class="block text-sm font-medium text-gray-700">
+                            Mileage (km)
+                        </label>
+                        <input type="number" name="{{ form.mileage.name }}" id="{{ form.mileage.id_for_label }}" 
+                               value="{{ form.mileage.value|default:'' }}"
+                               class="mt-1 focus:ring-primary-500 focus:border-primary-500 block w-full shadow-sm border-gray-300 rounded-md">
+                        {% if form.mileage.errors %}
+                        <p class="mt-2 text-sm text-red-600">
+                            {{ form.mileage.errors|join:", " }}
+                        </p>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+
+            <!-- Technical Specifications -->
+            <div class="bg-white rounded-lg shadow-sm p-6 space-y-4">
+                <h2 class="text-xl font-semibold mb-4">Technical Specifications</h2>
+                
+                <!-- Transmission and Fuel Type -->
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                        <label for="{{ form.transmission.id_for_label }}" class="block text-sm font-medium text-gray-700">
+                            Transmission
+                        </label>
+                        <select name="{{ form.transmission.name }}" id="{{ form.transmission.id_for_label }}"
+                                class="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-primary-500 focus:border-primary-500 rounded-md">
+                            {% for value, label in form.fields.transmission.choices %}
+                            <option value="{{ value }}" {% if form.transmission.value == value %}selected{% endif %}>
+                                {{ label }}
+                            </option>
+                            {% endfor %}
+                        </select>
+                        {% if form.transmission.errors %}
+                        <p class="mt-2 text-sm text-red-600">
+                            {{ form.transmission.errors|join:", " }}
+                        </p>
+                        {% endif %}
+                    </div>
+                    <div>
+                        <label for="{{ form.fuel_type.id_for_label }}" class="block text-sm font-medium text-gray-700">
+                            Fuel Type
+                        </label>
+                        <select name="{{ form.fuel_type.name }}" id="{{ form.fuel_type.id_for_label }}"
+                                class="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-primary-500 focus:border-primary-500 rounded-md">
+                            {% for value, label in form.fields.fuel_type.choices %}
+                            <option value="{{ value }}" {% if form.fuel_type.value == value %}selected{% endif %}>
+                                {{ label }}
+                            </option>
+                            {% endfor %}
+                        </select>
+                        {% if form.fuel_type.errors %}
+                        <p class="mt-2 text-sm text-red-600">
+                            {{ form.fuel_type.errors|join:", " }}
+                        </p>
+                        {% endif %}
+                    </div>
+                </div>
+
+                <!-- Engine Size and Power -->
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                        <label for="{{ form.engine_size.id_for_label }}" class="block text-sm font-medium text-gray-700">
+                            Engine Size (cc)
+                        </label>
+                        <input type="number" name="{{ form.engine_size.name }}" id="{{ form.engine_size.id_for_label }}" 
+                               value="{{ form.engine_size.value|default:'' }}"
+                               class="mt-1 focus:ring-primary-500 focus:border-primary-500 block w-full shadow-sm border-gray-300 rounded-md">
+                        {% if form.engine_size.errors %}
+                        <p class="mt-2 text-sm text-red-600">
+                            {{ form.engine_size.errors|join:", " }}
+                        </p>
+                        {% endif %}
+                    </div>
+                    <div>
+                        <label for="{{ form.power.id_for_label }}" class="block text-sm font-medium text-gray-700">
+                            Power (HP)
+                        </label>
+                        <input type="number" name="{{ form.power.name }}" id="{{ form.power.id_for_label }}" 
+                               value="{{ form.power.value|default:'' }}"
+                               class="mt-1 focus:ring-primary-500 focus:border-primary-500 block w-full shadow-sm border-gray-300 rounded-md">
+                        {% if form.power.errors %}
+                        <p class="mt-2 text-sm text-red-600">
+                            {{ form.power.errors|join:", " }}
+                        </p>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+
+            <!-- Additional Features -->
+            <div class="bg-white rounded-lg shadow-sm p-6 space-y-4">
+                <h2 class="text-xl font-semibold mb-4">Additional Features</h2>
+                
+                <!-- Body Type and Color -->
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                        <label for="{{ form.body_type.id_for_label }}" class="block text-sm font-medium text-gray-700">
+                            Body Type
+                        </label>
+                        <select name="{{ form.body_type.name }}" id="{{ form.body_type.id_for_label }}"
+                                class="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-primary-500 focus:border-primary-500 rounded-md">
+                            {% for value, label in form.fields.body_type.choices %}
+                            <option value="{{ value }}" {% if form.body_type.value == value %}selected{% endif %}>
+                                {{ label }}
+                            </option>
+                            {% endfor %}
+                        </select>
+                        {% if form.body_type.errors %}
+                        <p class="mt-2 text-sm text-red-600">
+                            {{ form.body_type.errors|join:", " }}
+                        </p>
+                        {% endif %}
+                    </div>
+                    <div>
+                        <label for="{{ form.color.id_for_label }}" class="block text-sm font-medium text-gray-700">
+                            Color
+                        </label>
+                        <select name="{{ form.color.name }}" id="{{ form.color.id_for_label }}"
+                                class="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-primary-500 focus:border-primary-500 rounded-md">
+                            {% for value, label in form.fields.color.choices %}
+                            <option value="{{ value }}" {% if form.color.value == value %}selected{% endif %}>
+                                {{ label }}
+                            </option>
+                            {% endfor %}
+                        </select>
+                        {% if form.color.errors %}
+                        <p class="mt-2 text-sm text-red-600">
+                            {{ form.color.errors|join:", " }}
+                        </p>
+                        {% endif %}
+                    </div>
+                </div>
+
+                <!-- Doors and Seats -->
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                        <label for="{{ form.doors.id_for_label }}" class="block text-sm font-medium text-gray-700">
+                            Number of Doors
+                        </label>
+                        <input type="number" name="{{ form.doors.name }}" id="{{ form.doors.id_for_label }}" 
+                               value="{{ form.doors.value|default:'' }}"
+                               class="mt-1 focus:ring-primary-500 focus:border-primary-500 block w-full shadow-sm border-gray-300 rounded-md">
+                        {% if form.doors.errors %}
+                        <p class="mt-2 text-sm text-red-600">
+                            {{ form.doors.errors|join:", " }}
+                        </p>
+                        {% endif %}
+                    </div>
+                    <div>
+                        <label for="{{ form.seats.id_for_label }}" class="block text-sm font-medium text-gray-700">
+                            Number of Seats
+                        </label>
+                        <input type="number" name="{{ form.seats.name }}" id="{{ form.seats.id_for_label }}" 
+                               value="{{ form.seats.value|default:'' }}"
+                               class="mt-1 focus:ring-primary-500 focus:border-primary-500 block w-full shadow-sm border-gray-300 rounded-md">
+                        {% if form.seats.errors %}
+                        <p class="mt-2 text-sm text-red-600">
+                            {{ form.seats.errors|join:", " }}
+                        </p>
+                        {% endif %}
+                    </div>
+                </div>
+
+                <!-- Features -->
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Features</label>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                        {% for value, label in form.features.field.choices %}
+                        <div class="flex items-center">
+                            <input type="checkbox" name="{{ form.features.name }}" value="{{ value.id }}"
+                                   {% if value in form.features.value %}checked{% endif %}
+                                   class="form-checkbox h-4 w-4 text-primary-600 focus:ring-primary-500 border-gray-300 rounded">
+                            <label class="ml-2 text-sm text-gray-700">{{ value.name }}</label>
+                        </div>
+                        {% endfor %}
+                    </div>
+                    {% if form.features.errors %}
+                    <p class="mt-2 text-sm text-red-600">
+                        {{ form.features.errors|join:", " }}
+                    </p>
+                    {% endif %}
+                </div>
+            </div>
+
+            <!-- Location -->
+            <div class="bg-white rounded-lg shadow-sm p-6 space-y-4">
+                <h2 class="text-xl font-semibold mb-4">Location</h2>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                        <label for="{{ form.province.id_for_label }}" class="block text-sm font-medium text-gray-700">
+                            Province
+                        </label>
+                        <select name="{{ form.province.name }}" id="{{ form.province.id_for_label }}"
+                                class="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-primary-500 focus:border-primary-500 rounded-md">
+                            {% for value, label in form.fields.province.choices %}
+                            <option value="{{ value }}" {% if form.province.value == value %}selected{% endif %}>
+                                {{ label }}
+                            </option>
+                            {% endfor %}
+                        </select>
+                        {% if form.province.errors %}
+                        <p class="mt-2 text-sm text-red-600">
+                            {{ form.province.errors|join:", " }}
+                        </p>
+                        {% endif %}
+                    </div>
+                    <div>
+                        <label for="{{ form.city.id_for_label }}" class="block text-sm font-medium text-gray-700">
+                            City
+                        </label>
+                        <input type="text" name="{{ form.city.name }}" id="{{ form.city.id_for_label }}" 
+                               value="{{ form.city.value|default:'' }}"
+                               class="mt-1 focus:ring-primary-500 focus:border-primary-500 block w-full shadow-sm border-gray-300 rounded-md">
+                        {% if form.city.errors %}
+                        <p class="mt-2 text-sm text-red-600">
+                            {{ form.city.errors|join:", " }}
+                        </p>
+                        {% endif %}
+                    </div>
+                </div>
+
+                <div>
+                    <label for="{{ form.location_details.id_for_label }}" class="block text-sm font-medium text-gray-700">
+                        Location Details
+                    </label>
+                    <input type="text" name="{{ form.location_details.name }}" id="{{ form.location_details.id_for_label }}" 
+                           value="{{ form.location_details.value|default:'' }}"
+                           class="mt-1 focus:ring-primary-500 focus:border-primary-500 block w-full shadow-sm border-gray-300 rounded-md">
+                    {% if form.location_details.errors %}
+                    <p class="mt-2 text-sm text-red-600">
+                        {{ form.location_details.errors|join:", " }}
+                    </p>
+                    {% endif %}
+                </div>
+            </div>
+
+            <!-- Description -->
+            <div class="bg-white rounded-lg shadow-sm p-6">
+                <label for="{{ form.description.id_for_label }}" class="block text-sm font-medium text-gray-700 mb-2">
+                    Description
+                </label>
+                <textarea name="{{ form.description.name }}" id="{{ form.description.id_for_label }}" rows="4"
+                          class="mt-1 focus:ring-primary-500 focus:border-primary-500 block w-full shadow-sm border-gray-300 rounded-md">{{ form.description.value|default:'' }}</textarea>
+                {% if form.description.errors %}
+                <p class="mt-2 text-sm text-red-600">
+                    {{ form.description.errors|join:", " }}
+                </p>
+                {% endif %}
+            </div>
+
+            <!-- Submit Button -->
+            <div class="flex justify-end">
+                <button type="submit" class="btn-primary">
+                    {% if form.instance.pk %}Update Car{% else %}Add Car{% endif %}
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

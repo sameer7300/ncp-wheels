@@ -1,0 +1,93 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Start Conversation - NCP Wheels{% endblock %}
+
+{% block content %}
+<div class="min-h-screen bg-gray-50 py-8">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="bg-white shadow sm:rounded-lg">
+            <!-- Header -->
+            <div class="px-4 py-5 sm:px-6 border-b border-gray-200">
+                <h3 class="text-lg leading-6 font-medium text-gray-900">
+                    Start Conversation
+                </h3>
+                <p class="mt-1 text-sm text-gray-500">
+                    Send a message to the seller about {{ car.year }} {{ car.brand }} {{ car.model }}
+                </p>
+            </div>
+
+            <!-- Form -->
+            <div class="px-4 py-5 sm:p-6">
+                <form id="conversation-form" method="post">
+                    {% csrf_token %}
+                    <div>
+                        <label for="message" class="block text-sm font-medium text-gray-700">
+                            Your Message
+                        </label>
+                        <div class="mt-1">
+                            <textarea id="message"
+                                    name="message"
+                                    rows="4"
+                                    class="shadow-sm focus:ring-primary-500 focus:border-primary-500 block w-full sm:text-sm border-gray-300 rounded-md"
+                                    placeholder="Hi, I'm interested in this car. Is it still available?"></textarea>
+                        </div>
+                    </div>
+                    <div class="mt-4 flex justify-end space-x-3">
+                        <a href="{{ car.get_absolute_url }}"
+                           class="inline-flex justify-center py-2 px-4 border border-gray-300 shadow-sm text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500">
+                            Cancel
+                        </a>
+                        <button type="submit"
+                                class="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-primary-600 hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500">
+                            Send Message
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const form = document.getElementById('conversation-form');
+    
+    form.addEventListener('submit', async function(e) {
+        e.preventDefault();
+        
+        const message = document.getElementById('message').value.trim();
+        if (!message) {
+            alert('Please enter a message');
+            return;
+        }
+        
+        try {
+            const response = await fetch(window.location.href, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                    'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value
+                },
+                body: new URLSearchParams({
+                    'message': message
+                })
+            });
+            
+            const data = await response.json();
+            
+            if (response.ok && data.redirect_url) {
+                window.location.href = data.redirect_url;
+            } else {
+                alert(data.error || 'Failed to start conversation');
+            }
+        } catch (error) {
+            console.error('Error:', error);
+            alert('Failed to start conversation');
+        }
+    });
+});
+</script>
+{% endblock %}

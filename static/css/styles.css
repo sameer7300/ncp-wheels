@@ -1,0 +1,163 @@
+/* TailwindCSS Base */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Custom Colors */
+:root {
+    --color-primary-50: #f0f9ff;
+    --color-primary-100: #e0f2fe;
+    --color-primary-200: #bae6fd;
+    --color-primary-300: #7dd3fc;
+    --color-primary-400: #38bdf8;
+    --color-primary-500: #0ea5e9;
+    --color-primary-600: #0284c7;
+    --color-primary-700: #0369a1;
+    --color-primary-800: #075985;
+    --color-primary-900: #0c4a6e;
+}
+
+/* Custom Components */
+@layer components {
+    .btn-primary {
+        @apply bg-primary-600 text-white px-4 py-2 rounded-md hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2;
+    }
+    
+    .btn-secondary {
+        @apply bg-gray-200 text-gray-700 px-4 py-2 rounded-md hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2;
+    }
+    
+    .form-input {
+        @apply mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-primary-500 focus:ring-primary-500;
+    }
+    
+    .form-label {
+        @apply block text-sm font-medium text-gray-700;
+    }
+    
+    .card {
+        @apply bg-white rounded-lg shadow-md overflow-hidden;
+    }
+    
+    .card-header {
+        @apply px-4 py-5 sm:px-6 border-b border-gray-200;
+    }
+    
+    .card-body {
+        @apply px-4 py-5 sm:p-6;
+    }
+}
+
+/* Custom Utilities */
+@layer utilities {
+    .text-shadow {
+        text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+    }
+    
+    .transition-fast {
+        transition-duration: 150ms;
+    }
+    
+    .transition-medium {
+        transition-duration: 300ms;
+    }
+}
+
+/* Global Styles */
+body {
+    @apply antialiased text-gray-900;
+}
+
+/* Header Styles */
+.header-nav {
+    @apply bg-white shadow-sm;
+}
+
+.header-link {
+    @apply inline-flex items-center px-1 pt-1 text-sm font-medium text-gray-900 hover:text-primary-600 transition-colors;
+}
+
+/* Hero Section */
+.hero-section {
+    @apply relative bg-gray-900;
+    min-height: 500px;
+}
+
+.hero-image {
+    @apply absolute inset-0 w-full h-full object-cover opacity-75;
+}
+
+.hero-content {
+    @apply relative z-10 max-w-7xl mx-auto py-24 px-4 sm:py-32 sm:px-6 lg:px-8 text-center;
+}
+
+/* Car Card */
+.car-card {
+    @apply bg-white rounded-lg shadow-md overflow-hidden transition-transform hover:scale-105;
+}
+
+.car-image {
+    @apply w-full h-48 object-cover;
+}
+
+.car-details {
+    @apply p-4;
+}
+
+.car-price {
+    @apply text-lg font-bold text-primary-600;
+}
+
+/* Form Styles */
+.form-container {
+    @apply max-w-md mx-auto;
+}
+
+.form-section {
+    @apply space-y-6;
+}
+
+.form-group {
+    @apply space-y-1;
+}
+
+/* Alert Styles */
+.alert {
+    @apply rounded-md p-4 mb-4;
+}
+
+.alert-success {
+    @apply bg-green-50 text-green-700;
+}
+
+.alert-error {
+    @apply bg-red-50 text-red-700;
+}
+
+/* Footer Styles */
+.footer {
+    @apply bg-white mt-12;
+}
+
+.footer-content {
+    @apply max-w-7xl mx-auto py-12 px-4 sm:px-6 lg:px-8;
+}
+
+/* Responsive Utilities */
+@media (max-width: 640px) {
+    .container {
+        @apply px-4;
+    }
+}
+
+@media (min-width: 641px) and (max-width: 1024px) {
+    .container {
+        @apply px-6;
+    }
+}
+
+@media (min-width: 1025px) {
+    .container {
+        @apply px-8;
+    }
+}

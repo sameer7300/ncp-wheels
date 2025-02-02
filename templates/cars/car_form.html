@@ -1,0 +1,361 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <div class="bg-white shadow sm:rounded-lg">
+        <div class="px-4 py-5 sm:p-6">
+            <h1 class="text-2xl font-semibold text-gray-900 mb-6">
+                {% if form.instance.pk %}Edit{% else %}Create{% endif %} Car Listing
+            </h1>
+
+            <form method="post" enctype="multipart/form-data" class="space-y-8">
+                {% csrf_token %}
+                
+                <!-- Basic Information -->
+                <div>
+                    <h3 class="text-lg font-medium leading-6 text-gray-900">Basic Information</h3>
+                    <div class="mt-6 grid grid-cols-1 gap-y-6 gap-x-4 sm:grid-cols-6">
+                        <div class="sm:col-span-2">
+                            <label for="{{ form.brand.id_for_label }}" class="block text-sm font-medium text-gray-700">Brand</label>
+                            {{ form.brand }}
+                            {% if form.brand.errors %}
+                                <p class="mt-2 text-sm text-red-600">{{ form.brand.errors.0 }}</p>
+                            {% endif %}
+                        </div>
+
+                        <div class="sm:col-span-2">
+                            <label for="{{ form.model.id_for_label }}" class="block text-sm font-medium text-gray-700">Model</label>
+                            {{ form.model }}
+                            {% if form.model.errors %}
+                                <p class="mt-2 text-sm text-red-600">{{ form.model.errors.0 }}</p>
+                            {% endif %}
+                        </div>
+
+                        <div class="sm:col-span-2">
+                            <label for="{{ form.year.id_for_label }}" class="block text-sm font-medium text-gray-700">Year</label>
+                            {{ form.year }}
+                            {% if form.year.errors %}
+                                <p class="mt-2 text-sm text-red-600">{{ form.year.errors.0 }}</p>
+                            {% endif %}
+                        </div>
+
+                        <div class="sm:col-span-2">
+                            <label for="{{ form.condition.id_for_label }}" class="block text-sm font-medium text-gray-700">Condition</label>
+                            {{ form.condition }}
+                            {% if form.condition.errors %}
+                                <p class="mt-2 text-sm text-red-600">{{ form.condition.errors.0 }}</p>
+                            {% endif %}
+                        </div>
+
+                        <div class="sm:col-span-2">
+                            <label for="{{ form.price.id_for_label }}" class="block text-sm font-medium text-gray-700">Price</label>
+                            {{ form.price }}
+                            {% if form.price.help_text %}
+                                <p class="mt-2 text-sm text-gray-500">{{ form.price.help_text }}</p>
+                            {% endif %}
+                            {% if form.price.errors %}
+                                <p class="mt-2 text-sm text-red-600">{{ form.price.errors.0 }}</p>
+                            {% endif %}
+                        </div>
+
+                        <div class="sm:col-span-2">
+                            <label for="{{ form.mileage.id_for_label }}" class="block text-sm font-medium text-gray-700">Mileage</label>
+                            {{ form.mileage }}
+                            {% if form.mileage.help_text %}
+                                <p class="mt-2 text-sm text-gray-500">{{ form.mileage.help_text }}</p>
+                            {% endif %}
+                            {% if form.mileage.errors %}
+                                <p class="mt-2 text-sm text-red-600">{{ form.mileage.errors.0 }}</p>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Technical Specifications -->
+                <div class="pt-8 border-t border-gray-200">
+                    <h3 class="text-lg font-medium leading-6 text-gray-900">Technical Specifications</h3>
+                    <div class="mt-6 grid grid-cols-1 gap-y-6 gap-x-4 sm:grid-cols-6">
+                        <div class="sm:col-span-2">
+                            <label for="{{ form.body_type.id_for_label }}" class="block text-sm font-medium text-gray-700">Body Type</label>
+                            {{ form.body_type }}
+                            {% if form.body_type.errors %}
+                                <p class="mt-2 text-sm text-red-600">{{ form.body_type.errors.0 }}</p>
+                            {% endif %}
+                        </div>
+
+                        <div class="sm:col-span-2">
+                            <label for="{{ form.transmission.id_for_label }}" class="block text-sm font-medium text-gray-700">Transmission</label>
+                            {{ form.transmission }}
+                            {% if form.transmission.errors %}
+                                <p class="mt-2 text-sm text-red-600">{{ form.transmission.errors.0 }}</p>
+                            {% endif %}
+                        </div>
+
+                        <div class="sm:col-span-2">
+                            <label for="{{ form.fuel_type.id_for_label }}" class="block text-sm font-medium text-gray-700">Fuel Type</label>
+                            {{ form.fuel_type }}
+                            {% if form.fuel_type.errors %}
+                                <p class="mt-2 text-sm text-red-600">{{ form.fuel_type.errors.0 }}</p>
+                            {% endif %}
+                        </div>
+
+                        <div class="sm:col-span-2">
+                            <label for="{{ form.engine_size.id_for_label }}" class="block text-sm font-medium text-gray-700">Engine Size</label>
+                            {{ form.engine_size }}
+                            {% if form.engine_size.help_text %}
+                                <p class="mt-2 text-sm text-gray-500">{{ form.engine_size.help_text }}</p>
+                            {% endif %}
+                            {% if form.engine_size.errors %}
+                                <p class="mt-2 text-sm text-red-600">{{ form.engine_size.errors.0 }}</p>
+                            {% endif %}
+                        </div>
+
+                        <div class="sm:col-span-2">
+                            <label for="{{ form.power.id_for_label }}" class="block text-sm font-medium text-gray-700">Power</label>
+                            {{ form.power }}
+                            {% if form.power.help_text %}
+                                <p class="mt-2 text-sm text-gray-500">{{ form.power.help_text }}</p>
+                            {% endif %}
+                            {% if form.power.errors %}
+                                <p class="mt-2 text-sm text-red-600">{{ form.power.errors.0 }}</p>
+                            {% endif %}
+                        </div>
+
+                        <div class="sm:col-span-2">
+                            <label for="{{ form.color.id_for_label }}" class="block text-sm font-medium text-gray-700">Color</label>
+                            {{ form.color }}
+                            {% if form.color.errors %}
+                                <p class="mt-2 text-sm text-red-600">{{ form.color.errors.0 }}</p>
+                            {% endif %}
+                        </div>
+
+                        <div class="sm:col-span-2">
+                            <label for="{{ form.doors.id_for_label }}" class="block text-sm font-medium text-gray-700">Doors</label>
+                            {{ form.doors }}
+                            {% if form.doors.errors %}
+                                <p class="mt-2 text-sm text-red-600">{{ form.doors.errors.0 }}</p>
+                            {% endif %}
+                        </div>
+
+                        <div class="sm:col-span-2">
+                            <label for="{{ form.seats.id_for_label }}" class="block text-sm font-medium text-gray-700">Seats</label>
+                            {{ form.seats }}
+                            {% if form.seats.errors %}
+                                <p class="mt-2 text-sm text-red-600">{{ form.seats.errors.0 }}</p>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Location -->
+                <div class="pt-8 border-t border-gray-200">
+                    <h3 class="text-lg font-medium leading-6 text-gray-900">Location</h3>
+                    <div class="mt-6 grid grid-cols-1 gap-y-6 gap-x-4 sm:grid-cols-6">
+                        <div class="sm:col-span-2">
+                            <label for="{{ form.province.id_for_label }}" class="block text-sm font-medium text-gray-700">Province</label>
+                            {{ form.province }}
+                            {% if form.province.errors %}
+                                <p class="mt-2 text-sm text-red-600">{{ form.province.errors.0 }}</p>
+                            {% endif %}
+                        </div>
+
+                        <div class="sm:col-span-2">
+                            <label for="{{ form.city.id_for_label }}" class="block text-sm font-medium text-gray-700">City</label>
+                            {{ form.city }}
+                            {% if form.city.errors %}
+                                <p class="mt-2 text-sm text-red-600">{{ form.city.errors.0 }}</p>
+                            {% endif %}
+                        </div>
+
+                        <div class="sm:col-span-2">
+                            <label for="{{ form.location_details.id_for_label }}" class="block text-sm font-medium text-gray-700">Location Details</label>
+                            {{ form.location_details }}
+                            {% if form.location_details.help_text %}
+                                <p class="mt-2 text-sm text-gray-500">{{ form.location_details.help_text }}</p>
+                            {% endif %}
+                            {% if form.location_details.errors %}
+                                <p class="mt-2 text-sm text-red-600">{{ form.location_details.errors.0 }}</p>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Features -->
+                <div class="pt-8 border-t border-gray-200">
+                    <h3 class="text-lg font-medium leading-6 text-gray-900">Features</h3>
+                    <p class="mt-1 text-sm text-gray-500">{{ form.features.help_text }}</p>
+                    
+                    <div class="mt-6 space-y-6">
+                        {% regroup form.features.field.queryset by get_category_display as feature_categories %}
+                        {% for category in feature_categories %}
+                            <div class="border rounded-lg p-4">
+                                <h4 class="text-md font-medium text-gray-900 mb-4">{{ category.grouper }}</h4>
+                                <div class="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
+                                    {% for feature in category.list %}
+                                        <div class="relative flex items-start">
+                                            <div class="flex h-5 items-center">
+                                                <input type="checkbox" 
+                                                       name="features" 
+                                                       value="{{ feature.pk }}"
+                                                       id="feature_{{ feature.pk }}"
+                                                       class="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"
+                                                       {% if feature in form.instance.features.all %}checked{% endif %}>
+                                            </div>
+                                            <div class="ml-3 text-sm">
+                                                <label for="feature_{{ feature.pk }}" class="font-medium text-gray-700">{{ feature.name }}</label>
+                                                {% if feature.description %}
+                                                    <p class="text-gray-500">{{ feature.description }}</p>
+                                                {% endif %}
+                                            </div>
+                                        </div>
+                                    {% endfor %}
+                                </div>
+                            </div>
+                        {% endfor %}
+                    </div>
+                </div>
+
+                <!-- Description -->
+                <div class="pt-8 border-t border-gray-200">
+                    <h3 class="text-lg font-medium leading-6 text-gray-900">Description</h3>
+                    <div class="mt-6">
+                        {{ form.description }}
+                        {% if form.description.help_text %}
+                            <p class="mt-2 text-sm text-gray-500">{{ form.description.help_text }}</p>
+                        {% endif %}
+                        {% if form.description.errors %}
+                            <p class="mt-2 text-sm text-red-600">{{ form.description.errors.0 }}</p>
+                        {% endif %}
+                    </div>
+                </div>
+
+                <!-- Images -->
+                <div class="pt-8 border-t border-gray-200">
+                    <h3 class="text-lg font-medium leading-6 text-gray-900">Images</h3>
+                    <div class="mt-6">
+                        {% if form.instance.pk and form.instance.images.exists %}
+                            <div class="mb-4">
+                                <h4 class="text-sm font-medium text-gray-900">Current Images</h4>
+                                <div class="mt-2 grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-4">
+                                    {% for image in form.instance.images.all %}
+                                        <div class="relative">
+                                            <img src="{{ image.image.url }}" alt="Car image {{ forloop.counter }}" class="h-24 w-full object-cover rounded-lg">
+                                            {% if image.is_primary %}
+                                                <span class="absolute top-0 right-0 inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">Primary</span>
+                                            {% endif %}
+                                        </div>
+                                    {% endfor %}
+                                </div>
+                            </div>
+                        {% endif %}
+
+                        <div class="mt-4">
+                            <label class="block text-sm font-medium text-gray-700">Add Images</label>
+                            <div class="mt-1 flex justify-center px-6 pt-5 pb-6 border-2 border-gray-300 border-dashed rounded-md">
+                                <div class="space-y-1 text-center">
+                                    <svg class="mx-auto h-12 w-12 text-gray-400" stroke="currentColor" fill="none" viewBox="0 0 48 48" aria-hidden="true">
+                                        <path d="M28 8H12a4 4 0 00-4 4v20m32-12v8m0 0v8a4 4 0 01-4 4H12a4 4 0 01-4-4v-4m32-4l-3.172-3.172a4 4 0 00-5.656 0L28 28M8 32l9.172-9.172a4 4 0 015.656 0L28 28m0 0l4 4m4-24h8m-4-4v8m-12 4h.02" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                                    </svg>
+                                    <div class="flex text-sm text-gray-600">
+                                        <label for="{{ form.images.id_for_label }}" class="relative cursor-pointer bg-white rounded-md font-medium text-indigo-600 hover:text-indigo-500 focus-within:outline-none focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-indigo-500">
+                                            <span>Upload files</span>
+                                            {{ form.images }}
+                                        </label>
+                                        <p class="pl-1">or drag and drop</p>
+                                    </div>
+                                    <p class="text-xs text-gray-500">PNG, JPG, GIF up to 10MB</p>
+                                </div>
+                            </div>
+                            {% if form.images.errors %}
+                                <p class="mt-2 text-sm text-red-600">{{ form.images.errors.0 }}</p>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Submit Button -->
+                <div class="pt-8 border-t border-gray-200">
+                    <div class="flex justify-end">
+                        <a href="{% url 'cars:my-listings' %}" class="bg-white py-2 px-4 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                            Cancel
+                        </a>
+                        <button type="submit" class="ml-3 inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                            {% if form.instance.pk %}Update{% else %}Create{% endif %} Listing
+                        </button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    // City selection based on province
+    const citiesByProvince = {{ CITIES_BY_PROVINCE|safe }};
+    const provinceSelect = document.querySelector('#id_province');
+    const citySelect = document.querySelector('#id_city');
+
+    function updateCityOptions() {
+        const selectedProvince = provinceSelect.value;
+        const cities = citiesByProvince[selectedProvince] || [];
+        
+        // Clear current options
+        citySelect.innerHTML = '';
+        
+        // Add default option
+        if (cities.length === 0) {
+            citySelect.add(new Option('Select a province first', ''));
+        }
+        
+        // Add city options
+        cities.forEach(city => {
+            citySelect.add(new Option(city, city));
+        });
+        
+        // If there's an initial city value, try to select it
+        const initialCity = citySelect.getAttribute('data-initial');
+        if (initialCity && cities.includes(initialCity)) {
+            citySelect.value = initialCity;
+        }
+    }
+
+    // Update cities when province changes
+    provinceSelect.addEventListener('change', updateCityOptions);
+    
+    // Initial update
+    updateCityOptions();
+
+    // Preview images before upload
+    document.querySelector('input[type="file"]').addEventListener('change', function(e) {
+        const preview = document.createElement('div');
+        preview.className = 'mt-4 grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-4';
+        preview.innerHTML = '<h3 class="text-sm font-medium text-gray-900 col-span-full">Preview</h3>';
+        
+        Array.from(e.target.files).forEach((file, index) => {
+            const reader = new FileReader();
+            reader.onload = function(event) {
+                const div = document.createElement('div');
+                div.className = 'relative';
+                div.innerHTML = `
+                    <img src="${event.target.result}" alt="Preview ${index + 1}" class="h-24 w-full object-cover rounded-lg">
+                    ${index === 0 ? '<span class="absolute top-0 right-0 inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">Primary</span>' : ''}
+                `;
+                preview.appendChild(div);
+            }
+            reader.readAsDataURL(file);
+        });
+        
+        // Remove existing preview if any
+        const existingPreview = document.querySelector('.image-preview');
+        if (existingPreview) {
+            existingPreview.remove();
+        }
+        
+        preview.classList.add('image-preview');
+        e.target.parentElement.parentElement.parentElement.appendChild(preview);
+    });
+</script>
+{% endblock %}

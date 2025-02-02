@@ -1,0 +1,148 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load car_filters %}
+
+{% block title %}Browse Cars - NCP Wheels{% endblock %}
+
+{% block content %}
+<div class="container mx-auto px-4 py-8">
+    <!-- Search and Filter Section -->
+    <div class="mb-8 bg-white rounded-lg shadow-sm p-6">
+        <form method="get" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+            <div>
+                <label for="search" class="form-label">Search</label>
+                <input type="text" name="search" id="search" value="{{ request.GET.search }}" 
+                       class="form-input" placeholder="Search cars...">
+            </div>
+            <div>
+                <label for="min_price" class="form-label">Min Price</label>
+                <input type="number" name="min_price" id="min_price" value="{{ request.GET.min_price }}" 
+                       class="form-input" placeholder="Min price">
+            </div>
+            <div>
+                <label for="max_price" class="form-label">Max Price</label>
+                <input type="number" name="max_price" id="max_price" value="{{ request.GET.max_price }}" 
+                       class="form-input" placeholder="Max price">
+            </div>
+            <div>
+                <label for="ordering" class="form-label">Sort By</label>
+                <select name="ordering" id="ordering" class="form-input">
+                    <option value="-created_at" {% if request.GET.ordering == '-created_at' %}selected{% endif %}>Newest First</option>
+                    <option value="price" {% if request.GET.ordering == 'price' %}selected{% endif %}>Price: Low to High</option>
+                    <option value="-price" {% if request.GET.ordering == '-price' %}selected{% endif %}>Price: High to Low</option>
+                    <option value="-year" {% if request.GET.ordering == '-year' %}selected{% endif %}>Year: Newest First</option>
+                </select>
+            </div>
+            <div class="md:col-span-2 lg:col-span-4 flex justify-end">
+                <button type="submit" class="btn-primary">Apply Filters</button>
+            </div>
+        </form>
+    </div>
+
+    <!-- Featured Listings -->
+    {% if featured_listings %}
+    <div class="mb-8">
+        <h2 class="text-2xl font-bold mb-4">Featured Listings</h2>
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {% for listing in featured_listings %}
+            <div class="card hover:shadow-lg transition-shadow duration-300">
+                {% if listing.car.images.exists %}
+                <img src="{{ listing.car.images.first.image.url }}" alt="{{ listing.car.brand }} {{ listing.car.model }}"
+                     class="w-full h-48 object-cover rounded-t-lg">
+                {% else %}
+                <div class="w-full h-48 bg-gray-200 flex items-center justify-center rounded-t-lg">
+                    <span class="text-gray-500">No image available</span>
+                </div>
+                {% endif %}
+                <div class="p-4">
+                    <h3 class="text-xl font-semibold mb-2">{{ listing.car.year }} {{ listing.car.brand }} {{ listing.car.model }}</h3>
+                    <div class="text-gray-600 mb-4">
+                        <p>{{ listing.car.mileage|intcomma }} km • {{ listing.car.transmission }}</p>
+                        <p class="text-lg font-semibold text-primary">PKR {{ listing.car.price|intcomma }}</p>
+                    </div>
+                    <a href="{% url 'cars:car-detail' pk=listing.car.pk %}" class="btn-primary block text-center">View Details</a>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+    {% endif %}
+
+    <!-- All Cars -->
+    <div>
+        <h2 class="text-2xl font-bold mb-4">All Cars</h2>
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {% for car in cars %}
+            <div class="card hover:shadow-lg transition-shadow duration-300">
+                {% if car.images.exists %}
+                <img src="{{ car.images.first.image.url }}" alt="{{ car.brand }} {{ car.model }}"
+                     class="w-full h-48 object-cover rounded-t-lg">
+                {% else %}
+                <div class="w-full h-48 bg-gray-200 flex items-center justify-center rounded-t-lg">
+                    <span class="text-gray-500">No image available</span>
+                </div>
+                {% endif %}
+                <div class="p-4">
+                    <h3 class="mt-4 text-sm text-gray-700">{{ car.year }} {{ car.brand }} {{ car.model }}</h3>
+                    <div class="text-gray-600 mb-4">
+                        <p>{{ car.mileage|intcomma }} km • {{ car.transmission }}</p>
+                        <p class="text-lg font-semibold text-primary">PKR {{ car.price|intcomma }}</p>
+                    </div>
+                    <a href="{% url 'cars:car-detail' pk=car.pk %}" class="btn-primary block text-center">View Details</a>
+                </div>
+            </div>
+            {% empty %}
+            <div class="col-span-full text-center py-12">
+                <h3 class="text-xl text-gray-600">No cars found matching your criteria</h3>
+            </div>
+            {% endfor %}
+        </div>
+        
+        <!-- Pagination -->
+        {% if is_paginated %}
+        <div class="mt-8 flex justify-center">
+            <nav class="inline-flex rounded-md shadow">
+                {% if page_obj.has_previous %}
+                <a href="?page={{ page_obj.previous_page_number }}" class="px-3 py-2 rounded-l-md border border-gray-300 bg-white text-sm font-medium text-gray-700 hover:bg-gray-50">
+                    Previous
+                </a>
+                {% endif %}
+                
+                {% for num in page_obj.paginator.page_range %}
+                {% if page_obj.number == num %}
+                <span class="px-3 py-2 border border-gray-300 bg-primary text-white text-sm font-medium">
+                    {{ num }}
+                </span>
+                {% else %}
+                <a href="?page={{ num }}" class="px-3 py-2 border border-gray-300 bg-white text-sm font-medium text-gray-700 hover:bg-gray-50">
+                    {{ num }}
+                </a>
+                {% endif %}
+                {% endfor %}
+                
+                {% if page_obj.has_next %}
+                <a href="?page={{ page_obj.next_page_number }}" class="px-3 py-2 rounded-r-md border border-gray-300 bg-white text-sm font-medium text-gray-700 hover:bg-gray-50">
+                    Next
+                </a>
+                {% endif %}
+            </nav>
+        </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const form = document.querySelector('form');
+    const inputs = form.querySelectorAll('input, select');
+    
+    inputs.forEach(input => {
+        input.addEventListener('change', () => {
+            form.submit();
+        });
+    });
+});
+</script>
+{% endblock %}

@@ -1,0 +1,230 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load humanize %}
+
+{% block title %}Feature Your {{ car.brand }} {{ car.model }} - NCP Wheels{% endblock %}
+
+{% block content %}
+<div class="min-h-screen bg-gray-50 py-12">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <!-- Car Details -->
+        <div class="bg-white shadow-sm rounded-lg overflow-hidden mb-8">
+            <div class="p-6">
+                <div class="flex items-center">
+                    {% if car.images.exists %}
+                    <div class="flex-shrink-0">
+                        <img src="{{ car.images.first.image.url }}" alt="{{ car }}" class="h-32 w-48 object-cover rounded-lg">
+                    </div>
+                    {% endif %}
+                    <div class="ml-6">
+                        <h2 class="text-2xl font-bold text-gray-900">{{ car.year }} {{ car.brand }} {{ car.model }}</h2>
+                        <div class="mt-2 text-sm text-gray-500">
+                            <p>{{ car.mileage|intcomma }} km • {{ car.transmission }} • {{ car.fuel_type }}</p>
+                            <p class="mt-1">{{ car.location }}</p>
+                        </div>
+                        <p class="mt-2 text-2xl font-semibold text-primary-600">PKR {{ car.price|intcomma }}</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Feature Plans -->
+        <div class="text-center mb-12">
+            <h2 class="text-3xl font-extrabold text-gray-900 sm:text-4xl">
+                Feature Your Listing
+            </h2>
+            <p class="mt-4 text-xl text-gray-600">
+                Get up to 10x more views and sell your car faster with our featured listing plans
+            </p>
+        </div>
+
+        <div class="grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-3">
+            {% for plan in plans %}
+            <div class="bg-white rounded-lg shadow-lg overflow-hidden relative {% if plan.priority_level >= 2 %}border-2 border-primary-500{% endif %}">
+                {% if plan.priority_level >= 2 %}
+                <div class="absolute top-0 right-0 bg-primary-500 text-white px-4 py-1 rounded-bl-lg text-sm font-medium">
+                    Popular
+                </div>
+                {% endif %}
+                
+                <div class="px-6 py-8">
+                    <h3 class="text-2xl font-semibold text-gray-900">{{ plan.name }}</h3>
+                    <p class="mt-4 text-gray-500">{{ plan.description }}</p>
+                    <p class="mt-8">
+                        <span class="text-4xl font-extrabold text-gray-900">PKR {{ plan.price|intcomma }}</span>
+                        <span class="text-base font-medium text-gray-500">/{{ plan.duration_days }} days</span>
+                    </p>
+
+                    <ul class="mt-8 space-y-4">
+                        <li class="flex items-center">
+                            <svg class="h-5 w-5 text-green-500" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
+                            </svg>
+                            <span class="ml-2 text-gray-600">{{ plan.duration_days }} Days Featured Listing</span>
+                        </li>
+                        <li class="flex items-center">
+                            <svg class="h-5 w-5 text-green-500" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
+                            </svg>
+                            <span class="ml-2 text-gray-600">Priority in Search Results</span>
+                        </li>
+                        {% if plan.priority_level >= 2 %}
+                        <li class="flex items-center">
+                            <svg class="h-5 w-5 text-green-500" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
+                            </svg>
+                            <span class="ml-2 text-gray-600">Featured in Search Results</span>
+                        </li>
+                        {% endif %}
+                        {% if plan.priority_level >= 3 %}
+                        <li class="flex items-center">
+                            <svg class="h-5 w-5 text-green-500" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
+                            </svg>
+                            <span class="ml-2 text-gray-600">Homepage Spotlight</span>
+                        </li>
+                        {% endif %}
+                    </ul>
+
+                    <div class="mt-8">
+                        <form method="post" action="{% url 'payments:initiate-featured-listing-payment' car_pk=car.pk %}" class="space-y-4">
+                            {% csrf_token %}
+                            <input type="hidden" name="plan_id" value="{{ plan.pk }}">
+                            
+                            <div>
+                                <label for="payment_method-{{ plan.pk }}" class="block text-sm font-medium text-gray-700">Payment Method</label>
+                                <select id="payment_method-{{ plan.pk }}" name="payment_method" class="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-primary-500 focus:border-primary-500 sm:text-sm rounded-md">
+                                    <option value="easypaisa">EasyPaisa</option>
+                                    <option value="bankalfalah">Bank Alfalah</option>
+                                </select>
+                            </div>
+
+                            <button type="submit" class="w-full flex items-center justify-center px-5 py-3 border border-transparent text-base font-medium rounded-md text-white {% if plan.priority_level >= 2 %}bg-primary-600 hover:bg-primary-700{% else %}bg-gray-600 hover:bg-gray-700{% endif %} focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500">
+                                Select Plan
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+
+        <!-- Benefits Section -->
+        <div class="mt-16">
+            <h3 class="text-2xl font-bold text-gray-900 text-center mb-8">Why Feature Your Listing?</h3>
+            <div class="grid grid-cols-1 gap-8 lg:grid-cols-3">
+                <div class="text-center">
+                    <div class="mx-auto h-12 w-12 text-primary-500">
+                        <svg class="h-12 w-12" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                        </svg>
+                    </div>
+                    <h4 class="mt-5 text-lg font-medium text-gray-900">Increased Visibility</h4>
+                    <p class="mt-2 text-base text-gray-500">Get up to 10x more views on your listing compared to regular listings</p>
+                </div>
+
+                <div class="text-center">
+                    <div class="mx-auto h-12 w-12 text-primary-500">
+                        <svg class="h-12 w-12" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                        </svg>
+                    </div>
+                    <h4 class="mt-5 text-lg font-medium text-gray-900">Faster Sales</h4>
+                    <p class="mt-2 text-base text-gray-500">Featured listings sell up to 2x faster than regular listings</p>
+                </div>
+
+                <div class="text-center">
+                    <div class="mx-auto h-12 w-12 text-primary-500">
+                        <svg class="h-12 w-12" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2z" />
+                        </svg>
+                    </div>
+                    <h4 class="mt-5 text-lg font-medium text-gray-900">Better Offers</h4>
+                    <p class="mt-2 text-base text-gray-500">Featured listings attract more serious buyers and better offers</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+function showLoading(button) {
+    button.disabled = true;
+    button.innerHTML = `
+        <svg class="animate-spin -ml-1 mr-3 h-5 w-5 text-white inline" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+            <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+        </svg>
+        Processing...
+    `;
+}
+
+function hideLoading(button) {
+    button.disabled = false;
+    button.innerHTML = 'Select Plan';
+}
+
+function showError(message) {
+    const errorDiv = document.createElement('div');
+    errorDiv.className = 'fixed top-4 right-4 bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded';
+    errorDiv.innerHTML = message;
+    document.body.appendChild(errorDiv);
+    setTimeout(() => errorDiv.remove(), 5000);
+}
+
+function getCookie(name) {
+    let cookieValue = null;
+    if (document.cookie && document.cookie !== '') {
+        const cookies = document.cookie.split(';');
+        for (let i = 0; i < cookies.length; i++) {
+            const cookie = cookies[i].trim();
+            if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                break;
+            }
+        }
+    }
+    return cookieValue;
+}
+
+function initializePayment(form) {
+    form.addEventListener('submit', async function(e) {
+        e.preventDefault();
+        const button = form.querySelector('button[type="submit"]');
+        showLoading(button);
+        
+        try {
+            const response = await fetch(form.action, {
+                method: 'POST',
+                body: new FormData(form),
+                headers: {
+                    'X-CSRFToken': getCookie('csrftoken')
+                }
+            });
+            
+            const data = await response.json();
+            
+            if (!response.ok) {
+                throw new Error(data.message || 'Payment initialization failed');
+            }
+            
+            if (data.status === 'success' && data.redirect_url) {
+                window.location.href = data.redirect_url;
+            } else {
+                throw new Error(data.message || 'No redirect URL received');
+            }
+        } catch (error) {
+            hideLoading(button);
+            showError(error.message);
+            console.error('Payment error:', error);
+        }
+    });
+}
+
+// Initialize all payment forms
+document.querySelectorAll('form[action*="initiate-payment"]').forEach(initializePayment);
+</script>
+{% endblock %}
