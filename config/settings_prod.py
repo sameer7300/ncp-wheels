@@ -11,9 +11,30 @@ DEBUG = False
 # Update allowed hosts
 ALLOWED_HOSTS = ['ncp-wheels.onrender.com', 'ncp-wheels.com', 'www.ncp-wheels.com']
 
-# Remove development-only apps but keep required ones
-INSTALLED_APPS = [app for app in INSTALLED_APPS if app != 'debug_toolbar']
-MIDDLEWARE = [m for m in MIDDLEWARE if not m.startswith('debug_toolbar.')]
+# Application definition
+INSTALLED_APPS = [
+    'django.contrib.admin',
+    'django.contrib.auth',
+    'django.contrib.contenttypes',
+    'django.contrib.sessions',
+    'django.contrib.messages',
+    'django.contrib.staticfiles',
+    
+    # Third party apps
+    'crispy_forms',
+    'crispy_bootstrap5',
+    'rest_framework',
+    'corsheaders',
+    
+    # Local apps
+    'apps.accounts',
+    'apps.cars',
+    'apps.payments',
+]
+
+# Remove debug toolbar middleware if present
+if 'debug_toolbar.middleware.DebugToolbarMiddleware' in MIDDLEWARE:
+    MIDDLEWARE.remove('debug_toolbar.middleware.DebugToolbarMiddleware')
 
 # CORS settings
 CORS_ALLOWED_ORIGINS = [

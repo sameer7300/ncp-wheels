@@ -7,32 +7,14 @@ requests==2.31.0
 mysqlclient==2.2.1
 
 # Forms and UI
-django-tailwind==3.8.0
 django-crispy-forms==2.1
-crispy-tailwind==0.5.0
+crispy-bootstrap5==2023.10
+django-cors-headers==4.3.1
 Pillow==10.1.0
 
-# API and Filtering
+# API
 djangorestframework==3.14.0
-django-filter==23.5
-django-cors-headers==4.3.1
-
-# Async and Real-time
-channels==4.0.0
-django-htmx==1.17.0
-
-# Phone Numbers
-django-phonenumber-field==7.3.0
-phonenumbers==8.13.0
-
-# Caching and Tasks
-redis==5.0.1
-django-redis==5.4.0
-celery==5.3.6
-django-celery-beat==2.5.0
-psycopg2-binary==2.9.9
 
 # Production
 gunicorn==21.2.0
 whitenoise==6.6.0
-sentry-sdk==1.39.1
