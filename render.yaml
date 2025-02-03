@@ -32,8 +32,6 @@ services:
         sync: false
       - key: DEFAULT_FROM_EMAIL
         sync: false
-      - key: ALLOWED_HOSTS
-        value: "*"
       - key: PORT
         value: 10000
     autoDeploy: true
