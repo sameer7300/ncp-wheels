@@ -39,7 +39,6 @@ INSTALLED_APPS = [
     'django_filters',
     'crispy_forms',
     'crispy_bootstrap5',
-    'channels',
     'phonenumber_field',
     'django_htmx',
     'tailwind',
