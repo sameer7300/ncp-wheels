@@ -18,6 +18,7 @@ phonenumbers==8.13.0
 
 # API
 djangorestframework==3.14.0
+django-filter==23.5
 
 # Production
 gunicorn==21.2.0
