@@ -12,15 +12,8 @@ sys.path.insert(0, PROJECT_ROOT)
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 
-# Update allowed hosts
-allowed_hosts = os.getenv('ALLOWED_HOSTS', '')
-ALLOWED_HOSTS = allowed_hosts.split(',') if allowed_hosts else [
-    'ncp-wheels.onrender.com',
-    'ncp-wheels.com',
-    'www.ncp-wheels.com',
-    'localhost',
-    '127.0.0.1',
-]
+# Update allowed hosts - temporarily allow all hosts for debugging
+ALLOWED_HOSTS = ['*']
 
 # Application definition
 INSTALLED_APPS = [

@@ -4,7 +4,7 @@ services:
     env: python
     region: oregon
     buildCommand: ./build.sh
-    startCommand: gunicorn config.wsgi:application --bind 0.0.0.0:8000
+    startCommand: gunicorn config.wsgi:application --bind 0.0.0.0:10000
     envVars:
       - key: DJANGO_SETTINGS_MODULE
         value: config.settings_prod
@@ -33,9 +33,9 @@ services:
       - key: DEFAULT_FROM_EMAIL
         sync: false
       - key: ALLOWED_HOSTS
-        value: ".onrender.com,ncp-wheels.onrender.com,ncp-wheels.com,www.ncp-wheels.com"
+        value: "*"
       - key: PORT
-        value: 8000
+        value: 10000
     autoDeploy: true
     plan: free
     runtime: python3.9
