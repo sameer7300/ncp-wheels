@@ -38,7 +38,7 @@ INSTALLED_APPS = [
     'rest_framework',
     'django_filters',
     'crispy_forms',
-    'crispy_tailwind',
+    'crispy_bootstrap5',
     'django_celery_beat',
     'channels',
     'phonenumber_field',
@@ -164,8 +164,8 @@ LOGIN_REDIRECT_URL = 'cars:car-list'
 LOGOUT_REDIRECT_URL = 'cars:car-list'
 
 # Crispy Forms
-CRISPY_ALLOWED_TEMPLATE_PACKS = 'tailwind'
-CRISPY_TEMPLATE_PACK = 'tailwind'
+CRISPY_ALLOWED_TEMPLATE_PACKS = 'bootstrap5'
+CRISPY_TEMPLATE_PACK = 'bootstrap5'
 
 # Tailwind CSS
 TAILWIND_APP_NAME = 'theme'
