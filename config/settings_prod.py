@@ -13,13 +13,13 @@ sys.path.insert(0, PROJECT_ROOT)
 DEBUG = False
 
 # Update allowed hosts
-ALLOWED_HOSTS = [
+allowed_hosts = os.getenv('ALLOWED_HOSTS', '')
+ALLOWED_HOSTS = allowed_hosts.split(',') if allowed_hosts else [
     'ncp-wheels.onrender.com',
     'ncp-wheels.com',
     'www.ncp-wheels.com',
     'localhost',
     '127.0.0.1',
-    '*',  # Temporarily allow all hosts while debugging
 ]
 
 # Application definition

@@ -32,6 +32,8 @@ services:
         sync: false
       - key: DEFAULT_FROM_EMAIL
         sync: false
+      - key: ALLOWED_HOSTS
+        value: ".onrender.com,ncp-wheels.onrender.com,ncp-wheels.com,www.ncp-wheels.com"
       - key: PORT
         value: 8000
     autoDeploy: true
