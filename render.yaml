@@ -34,6 +34,12 @@ services:
         sync: false
       - key: PORT
         value: 10000
+      - key: SECURE_SSL_REDIRECT
+        value: "true"
+      - key: SECURE_PROXY_SSL_HEADER_NAME
+        value: "HTTP_X_FORWARDED_PROTO"
+      - key: SECURE_PROXY_SSL_HEADER_VALUE
+        value: "https"
     autoDeploy: true
     plan: free
     runtime: python3.9
