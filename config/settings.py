@@ -40,7 +40,6 @@ INSTALLED_APPS = [
     'crispy_forms',
     'crispy_bootstrap5',
     'phonenumber_field',
-    'debug_toolbar',
     'corsheaders',
     
     # Local apps
@@ -62,7 +61,6 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'debug_toolbar.middleware.DebugToolbarMiddleware',
     'apps.analytics.middleware.AnalyticsMiddleware',
 ]
 
@@ -177,11 +175,6 @@ REST_FRAMEWORK = {
     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
     'PAGE_SIZE': 12,
 }
-
-# Debug Toolbar
-INTERNAL_IPS = [
-    '127.0.0.1',
-]
 
 # CORS settings
 CORS_ALLOW_ALL_ORIGINS = True  # Only for development!
