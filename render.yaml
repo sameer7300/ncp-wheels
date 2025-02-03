@@ -4,7 +4,7 @@ services:
     env: python
     region: oregon
     buildCommand: ./build.sh
-    startCommand: gunicorn config.wsgi:application --bind 0.0.0.0:10000
+    startCommand: gunicorn config.wsgi:application --bind 0.0.0.0:10000 --keyfile=key.pem --certfile=cert.pem
     envVars:
       - key: DJANGO_SETTINGS_MODULE
         value: config.settings_prod
@@ -40,6 +40,8 @@ services:
         value: "HTTP_X_FORWARDED_PROTO"
       - key: SECURE_PROXY_SSL_HEADER_VALUE
         value: "https"
+      - key: SECURE_MIN_TLS_VERSION
+        value: "TLS1.0"
     autoDeploy: true
     plan: free
     runtime: python3.9
