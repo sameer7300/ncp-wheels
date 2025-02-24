@@ -1,0 +1,119 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    function isSignedIn() {
+      return request.auth != null;
+    }
+    
+    function isOwner(userId) {
+      return isSignedIn() && request.auth.uid == userId;
+    }
+
+    function isChatParticipant(chatData) {
+      return isSignedIn() && request.auth.uid in chatData.participants;
+    }
+
+    function isAuthenticated() {
+      return request.auth != null;
+    }
+    
+    function isChatParticipantOld() {
+      return request.auth.uid in resource.data.participants;
+    }
+
+    match /users/{userId} {
+      allow read: if isAuthenticated();
+      allow create: if isAuthenticated() && isOwner(userId);
+      allow update: if isAuthenticated() && isOwner(userId);
+      allow delete: if false; // Prevent user deletion
+    }
+
+    match /listings/{listingId} {
+      allow read: if true;
+      allow create: if isAuthenticated();
+      allow update, delete: if isAuthenticated() && 
+        resource.data.userId == request.auth.uid;
+    }
+
+    match /chats/{chatId} {
+      allow create: if isSignedIn();
+      allow read, update: if isSignedIn() && 
+        (request.auth.uid in resource.data.participants || 
+         request.auth.uid in get(/databases/$(database)/documents/chats/$(chatId)).data.participants);
+
+      match /messages/{messageId} {
+        allow read: if isSignedIn() && 
+          request.auth.uid in get(/databases/$(database)/documents/chats/$(chatId)).data.participants;
+        
+        allow create: if isSignedIn() && 
+          request.auth.uid in get(/databases/$(database)/documents/chats/$(chatId)).data.participants &&
+          request.resource.data.senderId == request.auth.uid;
+        
+        allow update: if isSignedIn() && 
+          request.auth.uid in get(/databases/$(database)/documents/chats/$(chatId)).data.participants;
+      }
+    }
+
+    match /payments/{paymentId} {
+      allow read: if isAuthenticated() && (
+        resource.data.userId == request.auth.uid
+      );
+      allow create: if isAuthenticated();
+      allow update: if isAuthenticated() && 
+        resource.data.userId == request.auth.uid;
+      allow delete: if false; // Prevent payment deletion
+    }
+
+    match /views/{viewId} {
+      allow read, list: if isAuthenticated();
+      allow create: if isAuthenticated();
+      allow update: if false;
+      allow delete: if isAuthenticated() && (
+        resource.data.listingUserId == request.auth.uid
+      );
+    }
+
+    match /savedItems/{savedItemId} {
+      allow read, list: if isAuthenticated();
+      allow create: if isAuthenticated();
+      allow update: if false;
+      allow delete: if isAuthenticated() && (
+        resource.data.userId == request.auth.uid
+      );
+    }
+
+    match /activities/{activityId} {
+      allow read, list: if isAuthenticated();
+      allow create: if isAuthenticated();
+      allow update: if false;
+      allow delete: if false;
+    }
+
+    match /messages/{messageId} {
+      allow read, list: if isAuthenticated();
+      allow create: if isAuthenticated();
+      allow update: if isAuthenticated() && (
+        resource.data.senderId == request.auth.uid || 
+        resource.data.receiverId == request.auth.uid
+      );
+      allow delete: if isAuthenticated() && (
+        resource.data.senderId == request.auth.uid || 
+        resource.data.receiverId == request.auth.uid
+      );
+    }
+
+    match /notifications/{notificationId} {
+      allow read: if isAuthenticated() && resource.data.userId == request.auth.uid;
+      allow write: if isAuthenticated() && request.resource.data.userId == request.auth.uid;
+    }
+
+    match /preferences/{userId} {
+      allow read: if isAuthenticated() && isOwner(userId);
+      allow write: if isAuthenticated() && isOwner(userId);
+    }
+
+    match /analytics/{analyticsId} {
+      allow read, write: if isAuthenticated();
+    }
+  }
+}

@@ -1,0 +1,22 @@
+export const carFeatures = [
+  { id: 'abs', label: 'ABS', category: 'safety' },
+  { id: 'airbags', label: 'Airbags', category: 'safety' },
+  { id: 'alloyRims', label: 'Alloy Rims', category: 'exterior' },
+  { id: 'sunroof', label: 'Sunroof', category: 'comfort' },
+  { id: 'powerWindows', label: 'Power Windows', category: 'comfort' },
+  { id: 'powerSteering', label: 'Power Steering', category: 'comfort' },
+  { id: 'centralLocking', label: 'Central Locking', category: 'security' },
+  { id: 'keylessEntry', label: 'Keyless Entry', category: 'security' },
+  { id: 'ac', label: 'Air Conditioning', category: 'comfort' },
+  { id: 'heater', label: 'Heater', category: 'comfort' },
+  { id: 'leatherSeats', label: 'Leather Seats', category: 'interior' },
+  { id: 'cruiseControl', label: 'Cruise Control', category: 'comfort' },
+  { id: 'parkingSensors', label: 'Parking Sensors', category: 'safety' },
+  { id: 'reverseCamera', label: 'Reverse Camera', category: 'safety' },
+  { id: 'navigation', label: 'Navigation System', category: 'technology' },
+  { id: 'bluetooth', label: 'Bluetooth', category: 'technology' },
+  { id: 'usb', label: 'USB Port', category: 'technology' },
+  { id: 'aux', label: 'AUX Input', category: 'technology' },
+  { id: 'fogLights', label: 'Fog Lights', category: 'exterior' },
+  { id: 'xenonLights', label: 'Xenon/LED Lights', category: 'exterior' }
+];
